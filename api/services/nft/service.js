@@ -109,7 +109,7 @@ class NFTService {
     } = this
 
     const {
-      maxFeeTokenId = 1, // TODO: Remove the default later
+      tokenToUse,
       ipfsCid,
       nftType,
       nftAmount,
@@ -120,7 +120,7 @@ class NFTService {
       forceToMint = false
     } = body
 
-    const getMintConfig = ({ tokenAddress, storageId, nftId, mintingFees }) => {
+    const getMintConfig = ({ tokenAddress, storageId, nftId, mintingFees, maxFeeTokenId }) => {
       return {
         minterId,
         toAccountId,
@@ -158,17 +158,6 @@ class NFTService {
     logger.info(`${SERVICE_NAME}: Getting token address`)
     const tokenAddress = await getTokenAddress()
 
-    const getNextStorageId = async () => {
-      const res = await nftClient.getNextStorageId(apiKey, {
-        accountId: minterId,
-        maxFeeTokenId
-      })
-      if (!res) { throw new BadRequestError() }
-      return res.offchainId
-    }
-    logger.info(`${SERVICE_NAME}: Getting next storage id`)
-    const storageId = await getNextStorageId()
-
     logger.info(`${SERVICE_NAME}: Getting nftId from the ipfsCid`)
     const nftId = ipfsCid0ToNftID(ipfsCid)
 
@@ -182,9 +171,22 @@ class NFTService {
     }
     logger.info(`${SERVICE_NAME}: Getting off chain fees`)
     const mintingFees = await getOffChainFee()
+    const maxFeeTokenId = mintingFees.findIndex(fee => fee.token === tokenToUse.toUpperCase())
+    if (maxFeeTokenId < 1) { throw new BadRequestError() }
+
+    const getNextStorageId = async () => {
+      const res = await nftClient.getNextStorageId(apiKey, {
+        accountId: minterId,
+        maxFeeTokenId
+      })
+      if (!res) { throw new BadRequestError() }
+      return res.offchainId
+    }
+    logger.info(`${SERVICE_NAME}: Getting next storage id`)
+    const storageId = await getNextStorageId()
 
     logger.info(`${SERVICE_NAME}: preparing mint config`)
-    const mintConfig = getMintConfig({ tokenAddress, storageId, nftId, mintingFees })
+    const mintConfig = getMintConfig({ tokenAddress, storageId, nftId, mintingFees, maxFeeTokenId })
     logger.debug(`${SERVICE_NAME}: ${JSON.stringify(mintConfig)}`)
 
     const eddsaSignature = get_EddsaSig_NFT_Mint(mintConfig, privateKey)
