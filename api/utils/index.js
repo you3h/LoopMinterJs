@@ -1,5 +1,7 @@
 const logger = require('./logger')
+const { ipfsCid0ToNftID } = require('./generic')
 
 module.exports = {
-  logger
+  logger,
+  ipfsCid0ToNftID
 }

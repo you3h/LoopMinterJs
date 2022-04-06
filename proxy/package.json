@@ -6,6 +6,7 @@
     "dev": "nodemon .",
     "start": "node index.js"
   },
+  "author": "you3h",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^6.2.0",
