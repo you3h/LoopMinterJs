@@ -4,7 +4,7 @@ services:
     container_name: loopminterjs-api
     build: ./api
     image: loopminterjs/api
-  image_generator:
+  image:
     container_name: loopminterjs-image-generator
     build: ./image_generator
     image: loopminterjs/image_generator

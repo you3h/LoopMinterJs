@@ -7,7 +7,6 @@ RUN npm ci --silent
 # RUN npm audit
 COPY ./client .
 RUN npm run build
-RUN npm run post-build
 
 ### Stage 2 - server build ###
 FROM node:lts as build-srv
