@@ -1,6 +1,5 @@
 const express = require('express')
 const cors = require('cors')
-const bodyParser = require('body-parser')
 
 // * Middlewares
 const { errorHandler } = require('./middlewares')
@@ -28,6 +27,16 @@ class ApiServer {
     for (const key in settings) {
       app.set(key, settings[key])
     }
+
+    // * Add CORS set up
+    const corsMiddleware = cors({
+      origin: ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:8000'],
+      credentials: true,
+      preflightContinue: false
+    })
+
+    app.use(corsMiddleware)
+    app.options(corsMiddleware)
 
     app.use(express.json())
 

@@ -76,25 +76,25 @@ class NFTService {
       privateKey: this.privateKey ? 'Yes' : 'None'
     })}`)
 
-    return `User setup successful ${JSON.stringify({
+    return {
       minterId: this.minterId,
       minterAddress: this.minterAddress,
       toAccountId: this.toAccountId,
       toAddress: this.toAddress,
       apiKey: this.apiKey ? 'Yes' : 'None',
       privateKey: this.privateKey ? 'Yes' : 'None'
-    })}`
+    }
   }
 
   async getUser () {
-    return `Current user ${JSON.stringify({
+    return {
       minterId: this.minterId,
       minterAddress: this.minterAddress,
       toAccountId: this.toAccountId,
       toAddress: this.toAddress,
       apiKey: this.apiKey ? 'Yes' : 'None',
       privateKey: this.privateKey ? 'Yes' : 'None'
-    })}`
+    }
   }
   
   async mintNFT (body) {

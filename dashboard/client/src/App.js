@@ -1,11 +1,47 @@
-import './App.css';
+import { useEffect } from 'react'
+import styled from 'styled-components'
+import './App.less'
+
+import { SetUser } from './pages'
+import useStore from './store'
+import APIManager from './apiClient'
+
+const Container = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const App = () => {
+  const apiClient = new APIManager()
+
+  const {
+    user,
+    setUser
+  } = useStore(state => ({
+    user: state.user,
+    setUser: state.setUser
+  }))
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await apiClient.getUser()
+      setUser(res.data)
+    }
+
+    if (!user) {
+      console.log(user)
+      getUser()
+    }
+
+  }, []) // eslint-disable-line
+ 
   return (
-    <div className='App'>
-      LoopMinterJS Client  
-    </div>
-  );
+    <Container>
+      { !user || (user && !user.minterAddress && !user.minterId) ? <SetUser /> : <div>With User</div> }
+    </Container>
+  )
 }
 
-export default App;
+export default App
