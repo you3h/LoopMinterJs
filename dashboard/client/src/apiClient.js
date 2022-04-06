@@ -14,14 +14,14 @@ class APIManager {
   }
 
   async setUser (data) {
-    const res = await this.nftClient.post(`/user/setup`, data)
+    const res = await this.nftClient.post('/user/setup', data)
     return res.data
   }
 
-  // async mintNFT (schoolYearId, data) {
-  //   const res = await this.apiClient.post(`/schoolyears/${schoolYearId}/sections`, data)
-  //   return res.data
-  // }
+  async mintNFT (data) {
+    const res = await this.nftClient.post('/mint', data)
+    return res.data
+  }
 }
 
 export default APIManager

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 import './App.less'
 
-import { SetUser } from './pages'
+import { SetUser, MintNFT } from './pages'
 import useStore from './store'
 import APIManager from './apiClient'
 
@@ -31,15 +31,13 @@ const App = () => {
     }
 
     if (!user) {
-      console.log(user)
       getUser()
     }
 
   }, []) // eslint-disable-line
- 
   return (
     <Container>
-      { !user || (user && !user.minterAddress && !user.minterId) ? <SetUser /> : <div>With User</div> }
+      { !user || (user && !user.minterAddress && !user.minterId) ? <SetUser /> : <MintNFT /> }
     </Container>
   )
 }

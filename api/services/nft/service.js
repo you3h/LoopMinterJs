@@ -7,7 +7,8 @@ const { BadRequestError } = require('../../types/errors')
 const NFTClient = require('./NFTClient')
 
 const {
-  NFT_FACTORY
+  NFT_FACTORY,
+  NFT_EXCHANGE
 } = require('../../types/constants')
 
 const {
@@ -114,14 +115,13 @@ class NFTService {
       nftType,
       nftAmount,
       royaltyPercentage,
-      creatorFeeBips,
-      validUntil,
       nftBaseUri = '',
       forceToMint = false
     } = body
 
     const getMintConfig = ({ tokenAddress, storageId, nftId, mintingFees, maxFeeTokenId }) => {
       return {
+        exchange: NFT_EXCHANGE,
         minterId,
         toAccountId,
         toAddress,
@@ -141,8 +141,7 @@ class NFTService {
         },
         royaltyPercentage,
         amount: nftAmount,
-        creatorFeeBips,
-        validUntil,
+        validUntil: 1700000000,
         forceToMint
       }
     }
@@ -192,11 +191,10 @@ class NFTService {
     const eddsaSignature = get_EddsaSig_NFT_Mint(mintConfig, privateKey)
     logger.info(`${SERVICE_NAME}: EdDSA signature created!`)
 
-
     const mintNFT = async () => {
       const res = await nftClient.mintNFT(apiKey, {
         ...mintConfig,
-        eddsaSignature: eddsaSignature
+        eddsaSignature
       })
       if (!res) { throw new BadRequestError() }
       return res
