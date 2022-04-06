@@ -1,0 +1,18 @@
+{
+  "name": "proxy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-http-proxy": "^1.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}

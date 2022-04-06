@@ -1,0 +1,29 @@
+{
+  "name": "loopring-mint-nft",
+  "version": "0.0.1",
+  "description": "Mint NFT on L2 using Loopring",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/you3h/loopring-mint-nft.git"
+  },
+  "keywords": [
+    "Loopring"
+  ],
+  "author": "you3h",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/you3h/loopring-mint-nft/issues"
+  },
+  "homepage": "https://github.com/you3h/loopring-mint-nft#readme",
+  "dependencies": {
+    "@loopring-web/loopring-sdk": "^1.10.2",
+    "axios": "^0.26.1",
+    "bn.js": "^5.2.0",
+    "cids": "^1.1.9",
+    "dotenv": "^16.0.0"
+  }
+}

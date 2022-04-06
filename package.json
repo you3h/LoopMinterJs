@@ -1,0 +1,20 @@
+{
+  "name": "loopminterjs",
+  "version": "1.0.0",
+  "description": "Loopring Minter using NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules api/node_modules api/package-lock.json image_generator/node_modules image_generator/package-lock.json dashboard/client/node_modules dashboard/client/package-lock.json dashboard/server/node_modules dashboard/server/package-lock.json",
+    "start:dev-env": "concurrently -n \"api,image_generator,dashboard,proxy\" \"cd api && npm run dev\" \"cd image_generator && npm run dev\" \"cd dashboard/client && npm start\" \"cd proxy && npm run dev\" ",
+    "start:docker-local": "docker-compose -f docker-compose.yml -f docker-compose.local.yml up --build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://https://github.com/you3h/LoopMinterJs"
+  },
+  "author": "you3h",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^7.1.0"
+  }
+}
