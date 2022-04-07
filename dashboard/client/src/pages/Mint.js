@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { Form, Card, Radio, Input, InputNumber, Button, message } from 'antd'
 
+import useStore from '../store'
 import APIManager from '../apiClient'
 import { useLoader } from '../hooks/useLoader'
 
@@ -9,16 +11,32 @@ const layout = {
   layout: 'vertical'
 };
 
-const MintNFT = () => {
+const Mint = () => {
+  const [form] = Form.useForm()
   const apiClient = new APIManager()
   const { loader } = useLoader()
+
+  const {
+    mintSettings,
+    setMintSettings
+  } = useStore(state => ({
+    mintSettings: state.mintSettings,
+    setMintSettings: state.setMintSettings
+  }))
+
+
+  useEffect(() => {
+    if (mintSettings) {
+      form.setFieldsValue(mintSettings)
+    }
+  }, []) // eslint-disable-line
 
   const onFinish = async (values) => {
     try {
       loader.show()
       const res = await apiClient.mintNFT(values)
+      setMintSettings(values)
       message.success('NFT Minting successful')
-      // TODO: Show a successfull message on the screen
       return res
     } catch (err) {
       console.log(err)
@@ -29,8 +47,8 @@ const MintNFT = () => {
   };
 
   return (
-    <Card title='Mint NFT' size='small' className='user-form'>
-      <Form {...layout} onFinish={onFinish}>
+    <Card title='Mint NFT' size='small' className='default-form'>
+      <Form form={form} {...layout} onFinish={onFinish}>
         <Item name='tokenToUse' label='Payment Token' rules={[ { required: true } ]}>
         <Radio.Group buttonStyle='solid' value='LRC' size='small'>
           <Radio.Button value='ETH'>ETH</Radio.Button>
@@ -63,4 +81,4 @@ const MintNFT = () => {
   );
 }
 
-export default MintNFT
+export default Mint

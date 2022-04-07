@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
-.user-form {
-  width: 50%;
+.ant-layout-footer {
+  padding: 4px 10px !important;
+  font-size: 14px !important;
+}
+
+.default-form {
+  width: 50%
 }

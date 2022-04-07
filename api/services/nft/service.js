@@ -22,6 +22,7 @@ class NFTService {
 
     this.nftClient = new NFTClient()
 
+    this.alias = null
     this.minterId = null;
     this.minterAddress = null;
     this.toAccountId = null;
@@ -48,6 +49,7 @@ class NFTService {
 
   async userSetup (body) {
     const {
+      alias,
       minterId,
       minterAddress,
       toAccountId,
@@ -61,6 +63,7 @@ class NFTService {
       throw new BadRequestError();
     }
 
+    this.alias = alias
     this.minterId = minterId;
     this.minterAddress = minterAddress;
     this.toAccountId = toAccountId || minterId;
@@ -69,6 +72,7 @@ class NFTService {
     this.privateKey = privateKey
 
     logger.info(`${SERVICE_NAME}: User setup successful ${JSON.stringify({
+      alias: this.alias,
       minterId: this.minterId,
       minterAddress: this.minterAddress,
       toAccountId: this.toAccountId,
@@ -78,6 +82,7 @@ class NFTService {
     })}`)
 
     return {
+      alias: this.alias,
       minterId: this.minterId,
       minterAddress: this.minterAddress,
       toAccountId: this.toAccountId,
@@ -89,6 +94,7 @@ class NFTService {
 
   async getUser () {
     return {
+      alias: this.alias,
       minterId: this.minterId,
       minterAddress: this.minterAddress,
       toAccountId: this.toAccountId,
@@ -200,9 +206,11 @@ class NFTService {
       return res
     }
 
-    const nft = await mintNFT()
+    // ! Enable for Mint testing only
+    // const nft = await mintNFT()
+    const nft = 'TESTING'
+    
     logger.info(`${SERVICE_NAME}: NFT minting has been submitted to be processed!`)
-
     return nft
   }
 
