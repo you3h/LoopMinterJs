@@ -205,10 +205,10 @@ class NFTService {
       if (!res) { throw new BadRequestError() }
       return res
     }
+    let nft = null
 
-    // ! Enable for Mint testing only
-    // const nft = await mintNFT()
-    const nft = 'TESTING'
+    // ! Disable if testing only and do not want to spend LRC for minting
+    nft = await mintNFT()
     
     logger.info(`${SERVICE_NAME}: NFT minting has been submitted to be processed!`)
     return nft

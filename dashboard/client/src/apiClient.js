@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const NFT_SERVER_URL = 'http://localhost:8001/nft'
-// const NFT_SERVER_URL = 'http://localhost:8080/api/nft'
+// const NFT_SERVER_URL = 'http://localhost:8001/nft'
+const NFT_SERVER_URL = 'http://localhost:8080/api/nft'
 
 class APIManager {
   constructor () {
