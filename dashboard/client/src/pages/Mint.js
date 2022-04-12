@@ -28,6 +28,13 @@ const Mint = () => {
   useEffect(() => {
     if (mintSettings) {
       form.setFieldsValue(mintSettings)
+    } else {
+      form.setFieldsValue({
+        tokenToUse: 'LRC',
+        nftType: 0,
+        nftAmount: 1,
+        royaltyPercentage: 5
+      })
     }
   }, []) // eslint-disable-line
 
@@ -48,9 +55,9 @@ const Mint = () => {
 
   return (
     <Card title='Mint NFT' size='small' className='default-form'>
-      <Form form={form} {...layout} onFinish={onFinish}>
+      <Form form={form} {...layout} onFinish={onFinish} autoComplete='off'>
         <Item name='tokenToUse' label='Payment Token' rules={[ { required: true } ]}>
-        <Radio.Group buttonStyle='solid' value='LRC' size='small'>
+        <Radio.Group buttonStyle='solid' size='small'>
           <Radio.Button value='ETH'>ETH</Radio.Button>
           <Radio.Button value='LRC'>LRC</Radio.Button>
           <Radio.Button value='USDT'>USDT</Radio.Button>
@@ -73,7 +80,7 @@ const Mint = () => {
         <Item name='royaltyPercentage' label='Royalty Percentage' rules={[{ type: 'number', min: 5, max: 10 }, { required: true }]}>
           <InputNumber />
         </Item>
-        <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
+        <Button type='primary' htmlType='submit'>
           Mint
         </Button>
       </Form>

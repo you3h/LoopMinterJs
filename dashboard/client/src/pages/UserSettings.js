@@ -11,7 +11,7 @@ const layout = {
   layout: 'vertical'
 };
 
-const Settings = () => {
+const UserSettings = () => {
   const apiClient = new APIManager()
   const { loader } = useLoader()
   const [form] = Form.useForm();
@@ -41,7 +41,7 @@ const Settings = () => {
       loader.show()
       const res = await apiClient.setUser(values)
       setUser(res.data)
-      message.success('Settings Updated')
+      message.success('User settings updated')
     } catch (err) {
       message.error('Something went wrong while updating user')
     } finally {
@@ -51,7 +51,7 @@ const Settings = () => {
 
   return (
     <Card title='Setup User' size='small' className='default-form'>
-      <Form form={form} {...layout} onFinish={onFinish}>
+      <Form form={form} {...layout} onFinish={onFinish} autoComplete='off'>
         <Item name='alias' label='Alias' rules={[ { required: true } ]}>
           <Input />
         </Item>
@@ -75,12 +75,12 @@ const Settings = () => {
         >
           <Input />
         </Item>
-        <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-          Update Settings
+        <Button type='primary' htmlType='submit'>
+          Update User Settings
         </Button>
       </Form>
     </Card>
   );
 }
 
-export default Settings
+export default UserSettings

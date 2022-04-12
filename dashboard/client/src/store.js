@@ -5,6 +5,10 @@ const useStore = create(set => ({
   setUser: data => set({ user: data }),
   mintSettings: null,
   setMintSettings: data => set({ mintSettings: data }),
+  savedColor: {},
+  setSavedColor: data => set({ savedColor: data }),
+  filelist: {},
+  setFilelist: data => set({ filelist: data }),
 }))
 
 export default useStore

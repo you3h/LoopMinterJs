@@ -7,12 +7,16 @@ import {
   useNavigate
 } from 'react-router-dom'
 import styled from 'styled-components'
-import { Layout, Menu } from 'antd'
+import { Layout, Tag, Menu } from 'antd'
 import {
   HddOutlined,
   RocketOutlined,
   SendOutlined,
-  SettingOutlined, TagOutlined, TagsOutlined
+  SettingOutlined, 
+  TagOutlined, 
+  TagsOutlined, 
+  UserOutlined,
+  CheckOutlined
 } from '@ant-design/icons'
 
 import useStore from '../store'
@@ -22,15 +26,16 @@ import {
   Transfer,
   BatchTransfer,
   IPFSExplorer,
-  Settings,
+  UserSettings,
+  ImageSettings,
   NotFound
 } from '../pages'
 
 const { Footer, Content, Sider } = Layout
+const { SubMenu } = Menu
 
 const FooterTextContainer = styled.div`
   display: flex;
-  justify-content: space-between
 `
 
 
@@ -54,32 +59,49 @@ const ROUTES = [
   {
     url: '/mint',
     text: 'Single NFT Mint',
-    icon: <TagOutlined />
+    icon: <TagOutlined />,
+    show: true
   },
   {
     url: '/batchmint',
     text: 'Batch NFT Mint',
-    icon: <TagsOutlined />
+    icon: <TagsOutlined />,
+    show: false
   },
   {
     url: '/transfer',
     text: 'Single NFT Transfer',
-    icon: <SendOutlined />
+    icon: <SendOutlined />,
+    show: false
   },
   {
     url: '/batchtransfer',
     text: 'Batch NFT Transfer',
-    icon: <RocketOutlined />
+    icon: <RocketOutlined />,
+    show: false
   },
   {
     url: '/ipfs',
     text: 'IPFS',
-    icon: <HddOutlined />
+    icon: <HddOutlined />,
+    show: false
   },
   {
     url: '/settings',
     text: 'Setting',
-    icon: <SettingOutlined />
+    icon: <SettingOutlined />,
+    subMenu: [
+      {
+        url: '/settings-user',
+        text: 'User Credentials',
+        icon: <UserOutlined />,
+      },
+      {
+        url: '/settings-image',
+        text: 'Image Generation',
+        icon: <SettingOutlined />,
+      }
+    ]
   }
 ]
 
@@ -102,13 +124,36 @@ const MenuList = ({ navigate, location }) => {
   }
 
   return (
-    <Menu theme='dark' selectedKeys={[setSelectedKey()]} mode='inline'>
+    <Menu theme='dark' selectedKeys={[setSelectedKey()]} defaultOpenKeys={[setSelectedKey().split('-')[0]]} mode='inline'>
       {
-        ROUTES.map(route => (
-          <Menu.Item key={route.url} onClick={() => onClick(route.url)} icon={route.icon}>
-            {route.text}
-          </Menu.Item>
-        ))
+        ROUTES.map(route => {
+          const {
+            url,
+            icon,
+            text,
+            subMenu
+          } = route
+
+          if (subMenu && subMenu.length) {
+            return (
+              <SubMenu key={url} icon={icon} title={text}>
+                {
+                  subMenu.map(sub => (
+                    <Menu.Item key={sub.url} onClick={() => onClick(sub.url)} icon={sub.icon}>
+                      {sub.text}
+                    </Menu.Item>
+                  ))
+                }
+              </SubMenu>
+            )
+          }
+
+          return (
+            <Menu.Item key={url} onClick={() => onClick(url)} icon={icon}>
+              {text}
+            </Menu.Item>
+          )
+        })
       }
     </Menu>
   )
@@ -126,13 +171,13 @@ const Home = () => {
   }))
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ height: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)}>
         <SiderLogo collapsed={collapsed}/>
         <MenuList navigate={navigate} location={location} />
       </Sider>
       <Layout>
-        <Content style={{ margin: '20px 16px' }}>
+        <Content className='content-container'>
           <Routes>
             <Route path='*' element={<NotFound />} />
             <Route path='/mint' element={<Mint />} />
@@ -140,16 +185,31 @@ const Home = () => {
             <Route path='/transfer' element={<Transfer />} />
             <Route path='/batchtransfer' element={<BatchTransfer />} />
             <Route path='/ipfs' element={<IPFSExplorer />} />
-            <Route path='/settings' element={<Settings />} />
+            <Route path='/settings-user' element={<UserSettings />} />
+            <Route path='/settings-image' element={<ImageSettings />} />
             <Route path='/' element={<Navigate replace to='/mint' />} />
           </Routes>
         </Content>
         <Footer style={{ position: 'sticky', bottom: '0', }}>
           <FooterTextContainer>
-            <span>User: <b>{
+            <>User:&emsp; {
               user && user.alias
-                ? user.alias 
-                : 'No current user, update settings!'}</b></span>
+                ? <>
+                  <b>{user.alias}</b>&emsp;
+                  {user.apiKey && (
+                    <Tag icon={<CheckOutlined />} color='blue'>
+                      API Key
+                    </Tag>
+                  )}
+                  {user.privateKey && (
+                    <Tag icon={<CheckOutlined />} color='blue'>
+                      Private Key
+                    </Tag>
+                  )}
+                  </>
+                : 'No current user, update settings!'
+              }
+            </>
           </FooterTextContainer>
         </Footer>
       </Layout>
