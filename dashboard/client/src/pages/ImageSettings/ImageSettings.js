@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Form, Steps, Button, Card, message } from 'antd'
 import { ArrowLeftOutlined, ArrowRightOutlined, SendOutlined } from '@ant-design/icons'
 
+import APIManager from '../../apiClient'
 import { useLoader } from '../../hooks/useLoader'
 import Collection from './Collection'
 import Traits from './Traits'
@@ -43,6 +44,7 @@ const steps = (form, finalValues) => ([
 const ImageSettings = () => {
   const [form] = Form.useForm()
   const { loader } = useLoader()
+  const apiClient = new APIManager()
   const [finalValues, setFinalValues] = useState(null)
   const [currentStep, setCurrentStep] = useState(0)
 
@@ -67,7 +69,17 @@ const ImageSettings = () => {
   const onPrev = () => currentStep !== 0 && setCurrentStep(currentStep - 1)
 
   const onDone = async () => {
-    console.log(finalValues)
+    try {
+      loader.show()
+      const res = await apiClient.generateImageMetadata(finalValues)
+      message.success('Image Metadata created')
+      return res
+    } catch (err) {
+      console.log(err)
+      message.error('Something went wrong while creating metadata')
+    } finally {
+      loader.hide()
+    }
   };
 
   return (

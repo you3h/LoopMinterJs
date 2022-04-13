@@ -18,7 +18,7 @@ const { Item } = Form
 const { TextArea } = Input
 
 const Collection = ({ form, values }) => {
-  const [showThumbnail, setShowThumbnail] = useState(values && values.thumbnail)
+  const [showThumbnail, setShowThumbnail] = useState(values && values.thumbnails)
   const [isAnimated, setIsAnimated] = useState(values && values.animation)
   const [withBackground, setWithBackground] = useState(values && values.background)
   
@@ -112,12 +112,12 @@ const Collection = ({ form, values }) => {
             }
           </InlineItemContainer> 
           <InlineItemContainer>
-            <Item name='thumbnail' label='Generate Thumbnail' style={{ width: '25%' }}>
+            <Item name='thumbnails' label='Generate Thumbnail' style={{ width: '25%' }}>
               <Switch 
                 onChange={onChangeThumbnail}
                 checkedChildren='Yes'
                 unCheckedChildren='No'            
-                defaultChecked={values && values.thumbnail} 
+                defaultChecked={values && values.thumbnails} 
               />
             </Item>
             { showThumbnail &&

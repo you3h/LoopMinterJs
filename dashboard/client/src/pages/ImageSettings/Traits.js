@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Alert, Form, Divider, Select, Space, Input, Button, Upload, message } from 'antd'
+import { Alert, Form, Divider, Select, Space, Input, Button } from 'antd'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 
 import useStore from '../../store'
@@ -74,7 +74,7 @@ const BackgroundLayers = ({ savedColor, changeColor }) => {
   )
 }
 
-const InitTraits = ({ traits, traitNames, setTraitNames, filelist, setFilelist }) => {
+const InitTraits = ({ traits, traitNames, setTraitNames }) => {
   if (!traits) return null
 
   const traitsComponent = []
@@ -93,9 +93,7 @@ const InitTraits = ({ traits, traitNames, setTraitNames, filelist, setFilelist }
         </Item>
         <Variants 
           traitId={x} 
-          traitNames={traitNames} 
-          filelist={filelist}
-          setFilelist={setFilelist}
+          traitNames={traitNames}
         />
       </div>
     )  
@@ -104,39 +102,9 @@ const InitTraits = ({ traits, traitNames, setTraitNames, filelist, setFilelist }
   return traitsComponent
 }
 
-const Variants = ({ traitId, traitNames = {}, filelist, setFilelist }) => {
-  const uploadProps = (traitId, variantId) => ({
-    onRemove: () => {
-      setFilelist({
-        ...filelist,
-        [traitId]: {
-          ...filelist[traitId],
-          [variantId]: null
-        }
-      })
-    },
-    beforeUpload: file => {
-      if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-        message.error(`${file.name} is not a png/jpeg/jpg file`)
-        return false
-      }
-      setFilelist({
-        ...filelist,
-        [traitId]: {
-          ...filelist[traitId],
-          [variantId]: [file]
-        }
-      })
-      return false
-    },
-    listType: 'picture-card',
-    fileList: (filelist[traitId] && filelist[traitId][variantId]) 
-      ? [...filelist[traitId][variantId]]
-      : [],
-    accept: '.jpeg,.png,.jpg'
-  })
+const Variants = ({ traitId, traitNames = {} }) => {
   return (
-    <Form.List name={`traits-${traitId}-variants`}>
+    <Form.List name={`trait-${traitId}-variants`}>
       {(fields, { add, remove }) => (
         <>
           {fields.map(({ key, name, ...restField }, idx) => (
@@ -153,23 +121,8 @@ const Variants = ({ traitId, traitNames = {}, filelist, setFilelist }) => {
                     <Option value='1'>Legendary</Option>                        
                   </Select>
                 </Item>
-                <Item {...restField} name={[name, 'image']} rules={[
-                  () => ({
-                    validator (_, value) {
-                      if (!value || (value.file && (value.file.status === 'removed'))) {
-                        return Promise.reject(new Error('Image is required'))
-                      }
-                      return Promise.resolve()
-                    }
-                  })
-                ]}>
-                <Upload {...uploadProps(traitId, idx)} >
-                  {
-                    filelist[traitId] && filelist[traitId][idx] && filelist[traitId][idx].length >= 1 
-                      ? null 
-                      : <div><PlusOutlined /><div style={{ marginTop: 8 }}>Upload</div></div>
-                  }
-                </Upload>
+                <Item {...restField} name={[name, 'filename']} label='File Name' rules={[{ required: true, message: 'File name is required' }]}>
+                  <Input placeholder='File name' />
                 </Item>
               </Space>
             )
@@ -191,19 +144,11 @@ const Traits = ({ form, values }) => {
 
   const {
     savedColor,
-    setSavedColor,
-    filelist,
-    setFilelist
+    setSavedColor
   } = useStore(state => ({
     savedColor: state.savedColor,
-    setSavedColor: state.setSavedColor,
-    filelist: state.filelist,
-    setFilelist: state.setFilelist
+    setSavedColor: state.setSavedColor
   }))
-
-
-  // TODO: Remove after testing
-  // values = { collectionName: 'testing', numOftraits: 1, ...values }
 
   if (!values) return loader.show()
 
@@ -223,9 +168,7 @@ const Traits = ({ form, values }) => {
         <InitTraits 
           traits={values && values.numOftraits} 
           traitNames={traitNames} 
-          setTraitNames={setTraitNames} 
-          filelist={filelist}
-          setFilelist={setFilelist}
+          setTraitNames={setTraitNames}
         />
       </Form>
     </div>
