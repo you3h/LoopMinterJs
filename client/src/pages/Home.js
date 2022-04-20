@@ -53,7 +53,7 @@ const ROUTES = [
   },
   {
     url: '/collection-wizard',
-    text: 'Image Generation',
+    text: 'Collection Wizard',
     icon: <FileImageOutlined />,
     show: true
   },
