@@ -1,11 +1,37 @@
-const app = require('./app')
-const service = require('./service')
+// * Constants
+const { SERVER_NAME } = require('./types/constants')
 
-const port = process.env.DASHBOARD_PORT || 8000
-const { name, version } = service.about()
+const { logger } = require('./utils')
 
-const serviceName = 'LOOPMINTER_DASHBOARD_SERVER'
+const {
+  ApiServer,
+  apis,
+  port,
+  settings,
+  version
+} = require(`./config/api`)
 
-app.listen(port, () =>
-  console.log(`[${serviceName}] ${name} v${version} started on port ${port}`)
-)
+const apiServer = new ApiServer({ apis, settings, port })
+
+process.on('SIGTERM', async () => {
+  logger.info(`${SERVER_NAME} SIGTERM signal received`)
+  await apiServer.stop()
+  process.exit(1)
+})
+
+process.on('SIGINT', async () => {
+  logger.info(`${SERVER_NAME} SIGINT (Ctrl-C) received`)
+  await apiServer.stop()
+  process.exit(2)
+})
+
+// * catch uncaught exceptions, trace, then exit normally
+process.on('uncaughtException', async (e) => {
+  logger.error(`${SERVER_NAME} Uncaught Exception...`)
+  logger.error(e.stack)
+  await apiServer.stop()
+  process.exit(99)
+})
+
+logger.info(`${SERVER_NAME} version ${version} starting`)
+apiServer.start()

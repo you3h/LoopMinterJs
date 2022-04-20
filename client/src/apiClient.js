@@ -1,15 +1,15 @@
 import axios from 'axios'
 
-// const IPFS_SERVER_URL = 'http://localhost:8001/ipfs'
-const IPFS_SERVER_URL = 'http://localhost:8080/api/ipfs'
+// const NFT_SERVER_URL = 'http://localhost:8000/nft'
+const IMAGE_SERVER_URL = 'http://localhost:8000/image'
 
 class APIManager {
   constructor () {
-    this.ipfsClient = axios.create({ baseURL: IPFS_SERVER_URL })
+    this.imageClient = axios.create({ baseURL: IMAGE_SERVER_URL })
   }
 
   async generateImageMetadata (data) {
-    const res = await this.ipfsClient.post('/image/generate', data)
+    const res = await this.imageClient.post('/config/generate', data)
     return res.data
   }
 }
