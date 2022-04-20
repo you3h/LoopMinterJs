@@ -1,21 +1,13 @@
-import UserSettings from './UserSettings'
-import ImageSettings from './ImageSettings/ImageSettings'
+import MintingConfig from './MintingConfig'
+import CollectionWizard from './ImageSettings/CollectionWizard'
 import Mint from './Mint'
 import Home from './Home'
-import BatchMint from './BatchMint'
-import BatchTransfer from './BatchTransfer'
-import IPFSExplorer from './IPFSExplorer'
-import Transfer from './Transfer'
 import NotFound from './NotFound'
 
 export {
-  UserSettings,
-  ImageSettings,
+  MintingConfig,
+  CollectionWizard,
   Mint,
   Home,
-  BatchMint,
-  BatchTransfer,
-  IPFSExplorer,
-  Transfer,
   NotFound
 }

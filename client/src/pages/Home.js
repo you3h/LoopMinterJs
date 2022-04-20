@@ -9,25 +9,17 @@ import {
 import styled from 'styled-components'
 import { Layout, Tag, Menu } from 'antd'
 import {
-  HddOutlined,
-  RocketOutlined,
-  SendOutlined,
-  SettingOutlined, 
-  TagOutlined, 
-  TagsOutlined, 
+  TagOutlined,  
   UserOutlined,
-  CheckOutlined
+  CheckOutlined,
+  FileImageOutlined
 } from '@ant-design/icons'
 
 import useStore from '../store'
 import {
   Mint,
-  BatchMint,
-  Transfer,
-  BatchTransfer,
-  IPFSExplorer,
-  UserSettings,
-  ImageSettings,
+  MintingConfig,
+  CollectionWizard,
   NotFound
 } from '../pages'
 
@@ -37,8 +29,6 @@ const { SubMenu } = Menu
 const FooterTextContainer = styled.div`
   display: flex;
 `
-
-
 const LogoContainer = styled.div`
   width: 100%;
   height: 50px; 
@@ -54,54 +44,24 @@ const Logo = styled.div`
   width: ${props => props.width || '25px'};
 `
 
-
 const ROUTES = [
   {
     url: '/mint',
     text: 'Single NFT Mint',
     icon: <TagOutlined />,
+    show: false
+  },
+  {
+    url: '/collection-wizard',
+    text: 'Image Generation',
+    icon: <FileImageOutlined />,
     show: true
   },
   {
-    url: '/batchmint',
-    text: 'Batch NFT Mint',
-    icon: <TagsOutlined />,
-    show: false
-  },
-  {
-    url: '/transfer',
-    text: 'Single NFT Transfer',
-    icon: <SendOutlined />,
-    show: false
-  },
-  {
-    url: '/batchtransfer',
-    text: 'Batch NFT Transfer',
-    icon: <RocketOutlined />,
-    show: false
-  },
-  {
-    url: '/ipfs',
-    text: 'IPFS',
-    icon: <HddOutlined />,
-    show: false
-  },
-  {
-    url: '/settings',
-    text: 'Setting',
-    icon: <SettingOutlined />,
-    subMenu: [
-      {
-        url: '/settings-user',
-        text: 'User Credentials',
-        icon: <UserOutlined />,
-      },
-      {
-        url: '/settings-image',
-        text: 'Image Generation',
-        icon: <SettingOutlined />,
-      }
-    ]
+    url: '/minting-config',
+    text: 'Minting Config',
+    icon: <UserOutlined />,
+    show: true
   }
 ]
 
@@ -119,9 +79,7 @@ const MenuList = ({ navigate, location }) => {
     return `/${path[1]}`
   }
 
-  const onClick = (navigateTo) => {
-    navigate(navigateTo)
-  }
+  const onClick = (navigateTo) => navigate(navigateTo)
 
   return (
     <Menu theme='dark' selectedKeys={[setSelectedKey()]} defaultOpenKeys={[setSelectedKey().split('-')[0]]} mode='inline'>
@@ -131,8 +89,13 @@ const MenuList = ({ navigate, location }) => {
             url,
             icon,
             text,
+            show,
             subMenu
           } = route
+
+          if (!show) {
+            return null
+          }
 
           if (subMenu && subMenu.length) {
             return (
@@ -153,7 +116,7 @@ const MenuList = ({ navigate, location }) => {
               {text}
             </Menu.Item>
           )
-        })
+        }).filter(menu => menu)
       }
     </Menu>
   )
@@ -181,13 +144,9 @@ const Home = () => {
           <Routes>
             <Route path='*' element={<NotFound />} />
             <Route path='/mint' element={<Mint />} />
-            <Route path='/batchmint' element={<BatchMint />} />
-            <Route path='/transfer' element={<Transfer />} />
-            <Route path='/batchtransfer' element={<BatchTransfer />} />
-            <Route path='/ipfs' element={<IPFSExplorer />} />
-            <Route path='/settings-user' element={<UserSettings />} />
-            <Route path='/settings-image' element={<ImageSettings />} />
-            <Route path='/' element={<Navigate replace to='/mint' />} />
+            <Route path='/minting-config' element={<MintingConfig />} />
+            <Route path='/collection-wizard' element={<CollectionWizard />} />
+            <Route path='/' element={<Navigate replace to='/collection-wizard' />} />
           </Routes>
         </Content>
         <Footer style={{ position: 'sticky', bottom: '0', }}>

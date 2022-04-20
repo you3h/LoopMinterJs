@@ -41,7 +41,7 @@ const steps = (form, finalValues) => ([
   },
 ])
 
-const ImageSettings = () => {
+const CollectionWizard = () => {
   const [form] = Form.useForm()
   const { loader } = useLoader()
   const apiClient = new APIManager()
@@ -106,4 +106,4 @@ const ImageSettings = () => {
   );
 }
 
-export default ImageSettings
+export default CollectionWizard

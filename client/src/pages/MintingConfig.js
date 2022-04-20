@@ -11,7 +11,7 @@ const layout = {
   layout: 'vertical'
 };
 
-const UserSettings = () => {
+const MintingConfig = () => {
   const apiClient = new APIManager()
   const { loader } = useLoader()
   const [form] = Form.useForm();
@@ -83,4 +83,4 @@ const UserSettings = () => {
   );
 }
 
-export default UserSettings
+export default MintingConfig
